@@ -1,0 +1,45 @@
+{
+  "name": "emptyBackend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node -r ./node_modules/dotenv/config src/index.js",
+    "prod": "node -r src/index.js"
+  },
+  "repository": "https://github.com/Selesterkft/emptyBackend.git",
+  "author": "MLACIsGIT <molnar.laszlo@selester.hu>",
+  "license": "MIT",
+  "dependencies": {
+    "@selesterkft/express-logger": "^1.1.3",
+    "@selesterkft/sel-db": "^1.0.4",
+    "basic-ftp": "^4.6.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "swagger-ui-express": "^4.4.0",
+    "utf8": "^3.0.0",
+    "validator": "^13.7.0",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.17.10",
+    "@babel/core": "^7.18.0",
+    "@babel/node": "^7.17.10",
+    "@babel/preset-env": "^7.18.0",
+    "eslint": "^8.15.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.2.2",
+    "eslint-restricted-globals": "^0.2.0",
+    "jest": "^28.1.0",
+    "nodemon": "^2.0.16",
+    "prettier": "^2.6.2",
+    "supertest": "^6.2.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
+}
