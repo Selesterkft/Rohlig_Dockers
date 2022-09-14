@@ -1,0 +1,33 @@
+version: "3.2"
+
+services:
+    backend:
+        build: backend
+        ports:
+            - '4000:4000'
+        environment:
+            - DB_SERVER=<>
+            - DB_PORT=<>
+            - DB_DATABASE=<>
+            - DB_USER=<>
+            - DB_PASSWORD=<>
+            - DB_ENCRYPT=<false/true>
+            - DB_TIMEOUT=120000
+            - FTP_HOST=<>
+            - FTP_USER=<>
+            - FTP_PASSWORD=<>
+            - FTP_SECURE=<false/true>
+            - FTP_SHIPMENTS_DOWNLOAD_DIR=<>
+            - FTP_STATUSES_UPLOAD_DIR=<>
+            - FTP_TIMEOUT=30
+            - FTP_VERBOSE=false
+            - FTP_ENCODING=utf8
+            - DATACHANGE_TIMEOUT=60
+            - PORT=4000
+            - LOCAL_SYSTEM_IP=*
+            - STREAMS_PATH=./streams
+
+    cron:
+        build: cron
+        environment:
+            - BACKEND_URL=http://localhost:4000

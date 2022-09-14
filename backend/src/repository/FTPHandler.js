@@ -6,6 +6,7 @@ export default class FTPHandler {
         this.ftpConfig = ftpConfig;
         this.ftpParams = ftpParams;
         this.ftpClient = undefined;
+        this.encoding = ftpConfig.encoding;
     }
 
     getNewClient() {
@@ -73,12 +74,26 @@ export default class FTPHandler {
         await this.createStreamPath();
         await this.removeFileFromStreamPath(fileName);
         await this.ftpClient.downloadTo(streamFileName, fileName);
-        const result = fs.readFileSync(streamFileName, { encoding: 'latin1', flag: 'r' });
+        const result = fs.readFileSync(streamFileName, { encoding: this.encoding, flag: 'r' });
         this.removeFileFromStreamPath(fileName);
         return result;
     }
 
     async pwd() {
         return await this.ftpClient.pwd();
+    }
+
+    async upload(buffer, fileName) {
+        const streamFileName = `${this.getStreamPath()}/${fileName}`;
+
+        await this.createStreamPath();
+        await this.removeFileFromStreamPath(fileName);
+
+        fs.writeFileSync(streamFileName, buffer);
+        await this.ftpClient.ensureDir(process.env.FTP_STATUSES_UPLOAD_DIR);
+        await this.ftpClient.uploadFrom(streamFileName, fileName);
+        await this.removeFileFromStreamPath(fileName);
+
+        return {}
     }
 }

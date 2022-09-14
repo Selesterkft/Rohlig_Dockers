@@ -1,0 +1,14 @@
+FROM node:16-alpine
+
+WORKDIR /app
+
+COPY . .
+COPY ./crondJobs /var/spool/cron/crontabs/root
+
+ENV BACKEND_URL=http://host.docker.internal:4000
+
+EXPOSE 4000
+
+RUN ["yarn"]
+
+CMD ["crond", "-f"]

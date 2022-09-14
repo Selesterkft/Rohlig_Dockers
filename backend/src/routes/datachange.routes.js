@@ -14,5 +14,5 @@ router.use(express.json());
 router.use(verifyLocalSystem);
 
 router.get('/shipments', datachangeController.importShipments);
-
+router.put('/statuses', datachangeController.exportStatuses);
 export default router;

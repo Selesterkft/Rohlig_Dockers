@@ -1,8 +1,12 @@
 import { ftp } from '../ftp/ftpConnection';
 import {
-    U_FTP_GET_NEW_TransactID, U_FTP_IMPORT_SHIPMENT
+    U_FTP_GET_NEW_TransactID,
+    U_FTP_IMPORT_SHIPMENT,
+    U_PLEDI_STATUS_XML_GET_NEXT,
+    U_PLEDI_Set_EDI_Communications_Status,
 } from '../db/storedProcedures';
-import utf8 from 'utf8';
+import { db, sqlConfig } from '../db/dbConnection';
+import Timeout from '../repository/Timeout';
 
 export const datachangeService = {
     async importShipmentsFromFTP() {
@@ -10,7 +14,7 @@ export const datachangeService = {
 
         await ftp.cd(process.env.FTP_SHIPMENTS_DOWNLOAD_DIR);
 
-        const listOfFiles = (await ftp.listCurrentPath()).filter(e => e.name.slice(-4) === '.xml').map(e => e.name);
+        const listOfFiles = (await ftp.listCurrentPath()).filter(e => e.name.slice(-4) === '.txt').map(e => e.name);
         const importedFiles = [];
         let ftpTransactId;
         console.log('+++ ftp', listOfFiles)
@@ -28,7 +32,7 @@ export const datachangeService = {
 
                 await ftp.rename(cFileName, changedFileName)
                 const data = await ftp.download(changedFileName);
-                console.log('+++ data', data, utf8.encode(data))
+                console.log('+++ data', data)
                 const saveInfo = await U_FTP_IMPORT_SHIPMENT(ftpTransactId, cFileName, data);
 
                 await ftp.remove(changedFileName);
@@ -54,5 +58,41 @@ export const datachangeService = {
             ftpTransactId,
             importedFiles,
         };
+    },
+
+    async exportStatuses(params) {
+        await ftp.connect();
+
+        const exportedFiles = [];
+        const timeout = new Timeout(params.timeout, 60);
+
+        do {
+            db.initiateConnection(sqlConfig);
+            const fileToUpload = await U_PLEDI_STATUS_XML_GET_NEXT()
+            if (!fileToUpload.fileId) {
+                break;
+            }
+
+            if (!fileToUpload.shipmentReference) {
+                fileToUpload.result = {
+                    status: 'ERR',
+                    message: 'shipmentReference is empty!'
+                }
+            } else {
+                const buffer = Buffer.from(fileToUpload.xml, 'utf-8');
+                await ftp.upload(buffer, fileToUpload.fileName);
+                fileToUpload.result = {
+                    status: 'OK',
+                    message: ''
+                }
+            }
+
+            db.initiateConnection(sqlConfig);
+            await U_PLEDI_Set_EDI_Communications_Status(fileToUpload);
+            exportedFiles.push(fileToUpload);
+        } while (!timeout.isEllapsed())
+        return {
+            exportedFiles,
+        }
     }
 }

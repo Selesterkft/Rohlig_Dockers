@@ -10,6 +10,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
+  - url: http://20.52.235.77:4000
   - url: http://localhost:4000
 tags:
   - name: api
@@ -18,8 +19,6 @@ tags:
     description: Get this documentation from server
   - name: ftp
     description: Get list of files on FTP
-  - name: data
-    description: get reports data
   - name: datachange
     description: imports and exports file between ftp and SELEXPED database
 paths:
@@ -54,7 +53,7 @@ paths:
           required: true
           schema:
             type: string
-            enum: ["/tst/out/shipment", "/tst/in/status"]
+            enum: ["/tst/out/shipment", "/tst/out/status"]
       responses:
         '200':
           description: returns the list of files in selected directory.
@@ -71,76 +70,6 @@ paths:
                       $ref: '#/components/schemas/fileData'
         '404':
           description: path not exists.
-  /data/:
-    get:
-      tags:
-        - data
-      summary: Get data from SQL-Server
-      parameters:
-        - in: header
-          name: select
-          description: list of fields
-          required: true
-          schema:
-            type: string
-        - in: header
-          name: top
-          description: max amount of datarows
-          schema:
-            type: integer
-        - in: header
-          name: from
-          description: name of the SQL-datatable / view
-          required: true
-          schema:
-            type: string
-        - in: header
-          name: where
-          description: WHERE segment of the sql statement
-          schema:
-            type: string
-        - in: header
-          name: groupby
-          description: GROUP BY segment of the sql statement
-          schema:
-            type: string
-        - in: header
-          name: orderby
-          description: ORDER BY segment of the sql statement
-          required: true
-          schema:
-            type: string
-        - in: header
-          name: language
-          description: Language of the language-sensitive data (only 'H' is supported at the moment.)
-          schema:
-            type: string
-        - in: header
-          name: pageNo
-          description: The page of the list.)
-          schema:
-            type: string
-        - in: header
-          name: rowsperpage
-          description: Count of records on a page.)
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Downloads data from the SQL-Server.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  columns:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/column'
-                  data:
-                    type: array
-                    items:
-                      type: object
   /datachange/shipments:
     get:
       tags:

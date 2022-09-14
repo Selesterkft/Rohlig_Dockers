@@ -5,6 +5,7 @@ const ftpConfig = {
     user: process.env.FTP_USER,
     password: process.env.FTP_PASSWORD,
     secure: process.env.FTP_SECURE === 'true' ? true : false,
+    encoding: process.env.FTP_ENCODING ? process.env.FTP_ENCODING : 'utf8',
   };
 
 export const ftpParams = {
