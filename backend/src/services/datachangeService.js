@@ -70,6 +70,7 @@ export const datachangeService = {
             db.initiateConnection(sqlConfig);
             const fileToUpload = await U_PLEDI_STATUS_XML_GET_NEXT()
             if (!fileToUpload.fileId) {
+                db.dropConnection()
                 break;
             }
 
@@ -86,11 +87,16 @@ export const datachangeService = {
                     message: ''
                 }
             }
-
+            db.dropConnection()
+            
             db.initiateConnection(sqlConfig);
             await U_PLEDI_Set_EDI_Communications_Status(fileToUpload);
             exportedFiles.push(fileToUpload);
+            db.dropConnection()
+
         } while (!timeout.isEllapsed())
+        ftp.close();
+
         return {
             exportedFiles,
         }

@@ -4,13 +4,16 @@ import { ftp } from '../ftp/ftpConnection';
 export const heartbeat = async (req, res) => {
   const result = {
     heartbeat: true,
-    version: '2022.08.28-01',
+    version: '2022.09.26-01',
     dbConnection: false,
     ftpConnection: false,
+    countOfStatusesInQuene: 'n/a',
   }
   try {
-    await sqlPing();
-    result.dbConnection = true
+    const sqlResult = await sqlPing();
+  
+    result.dbConnection = true;
+    result.countOfStatusesInQuene = sqlResult.countOfStatusesInQuene;
   } catch (error) {
     //Nothing to do
   }
