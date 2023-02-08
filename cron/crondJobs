@@ -1,1 +1,1 @@
-*/2 * * * * cd /app && node -r dotenv/config /app/exportStatuses.js
+*/5 * * * * cd /app && node -r dotenv/config /app/exportStatuses.js
