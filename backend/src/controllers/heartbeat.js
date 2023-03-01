@@ -6,7 +6,7 @@ export const heartbeat = async (req, res) => {
   let connected = false;
   const result = {
     heartbeat: true,
-    version: '2022.09.26-01',
+    version: '2023.02.14-01',
     dbConnection: false,
     ftpConnection: false,
     countOfStatusesInQuene: 'n/a',

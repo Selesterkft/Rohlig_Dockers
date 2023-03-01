@@ -19,8 +19,11 @@ tags:
     description: Get this documentation from server
   - name: ftp
     description: Get list of files on FTP
-  - name: datachange
-    description: imports and exports file between ftp and SELEXPED database
+  - name: rohligpl
+    description: imports and exports file between Röhlig PL ftp and SELEXPED database
+  - name: transpack
+    description: Interface to Trans-pack
+
 paths:
   /api/heartbeat:
     get:
@@ -70,10 +73,10 @@ paths:
                       $ref: '#/components/schemas/fileData'
         '404':
           description: path not exists.
-  /datachange/shipments:
+  /rohligpl/shipments:
     get:
       tags:
-        - datachange
+        - rohligpl
       summary: Downloads shipment xml files from the FTP and saves them to the SQL-server database.
       responses:
         '200':
@@ -93,10 +96,10 @@ paths:
                     type: array
                     items:
                       type: string
-  /datachange/statuses:
+  /rohligpl/statuses:
     put:
       tags:
-        - datachange
+        - rohligpl
       summary: Uploads shipment statuschanges from SELEXPED to FTP.
       responses:
         '200':
@@ -116,6 +119,42 @@ paths:
                     type: array
                     items:
                       type: string
+  /transpack/shipments:
+    get:
+      tags:
+        - transpack
+      summary: send shipment to Trans-pack via API
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/column'
+  /transpack/statuses:
+    put:
+      tags:
+        - transpack
+      summary: set Shipment status from Trans-pack
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/column'
+  /transpack/login:
+    post:
+      tags:
+        - transpack
+      summary: login into Trans-pack
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/column'
 
 components:
   schemas:

@@ -29,7 +29,6 @@ export default class FTPHandler {
             this.close();
             return true;
         } catch (error) {
-            console.log('+++ ftp error', error)
             return false;
         }
     }

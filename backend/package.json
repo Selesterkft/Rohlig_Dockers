@@ -17,6 +17,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "node-fetch": "2",
     "swagger-ui-express": "^4.4.0",
     "validator": "^13.7.0",
     "yamljs": "^0.3.0"

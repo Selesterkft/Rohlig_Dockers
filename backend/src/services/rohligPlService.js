@@ -8,7 +8,7 @@ import {
 import { db, sqlConfig } from '../db/dbConnection';
 import Timeout from '../repository/Timeout';
 
-export const datachangeService = {
+export const rohligPlService = {
     async importShipmentsFromFTP() {
         await ftp.connect();
 
@@ -17,7 +17,6 @@ export const datachangeService = {
         const listOfFiles = (await ftp.listCurrentPath()).filter(e => e.name.slice(-4) === '.txt').map(e => e.name);
         const importedFiles = [];
         let ftpTransactId;
-        console.log('+++ ftp', listOfFiles)
 
         if (listOfFiles.length > 0) {
             ftpTransactId = (await U_FTP_GET_NEW_TransactID()).FTP_TransactID;
@@ -32,7 +31,6 @@ export const datachangeService = {
 
                 await ftp.rename(cFileName, changedFileName)
                 const data = await ftp.download(changedFileName);
-                console.log('+++ data', data)
                 const saveInfo = await U_FTP_IMPORT_SHIPMENT(ftpTransactId, cFileName, data);
 
                 await ftp.remove(changedFileName);
@@ -88,7 +86,7 @@ export const datachangeService = {
                 }
             }
             db.dropConnection()
-            
+
             db.initiateConnection(sqlConfig);
             await U_PLEDI_Set_EDI_Communications_Status(fileToUpload);
             exportedFiles.push(fileToUpload);

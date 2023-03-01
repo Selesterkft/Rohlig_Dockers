@@ -1,9 +1,9 @@
-import { datachangeService } from "../services/datachangeService";
-
-export const datachangeController = {
+import { rohligPlService } from "../services/rohligPlService";
+    
+export const rohligPlController = {
     async importShipments(req, res, next) {
         try {
-            const result = await datachangeService.importShipmentsFromFTP();
+            const result = await rohligPlService.importShipmentsFromFTP();
             res.status(200).json(result);
         } catch (error) {
             throw new Error('Internal error');
@@ -12,7 +12,7 @@ export const datachangeController = {
 
     async exportStatuses(req, res, next) {
         try {
-            const result = await datachangeService.exportStatuses(req.headers);
+            const result = await rohligPlService.exportStatuses(req.headers);
             res.status(200).json(result);
         } catch (error) {
             throw new Error('Internal error');
