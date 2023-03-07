@@ -53,7 +53,6 @@ export async function loginService() {
         headers,
         body: JSON.stringify(body),
     })
-    const jsonData = response.json();
-    console.log('+++ loginService.js (line: 58)', JSON.stringify(jsonData));
+    const jsonData = await response.json();
     return JSON.stringify(jsonData);
 }

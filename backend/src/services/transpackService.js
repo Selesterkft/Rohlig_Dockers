@@ -11,7 +11,6 @@ const fetch = require('node-fetch');
 let urlSendShipment;
 
 async function sendToTranspack(myParams) {
-    console.log('+++ transpackService.js (line: 14)', myParams);
     const headers = myParams.headers;
     const body = myParams.body;
     const response = await fetch(myParams.url, {
@@ -67,7 +66,6 @@ export const transpackService = {
         let jsonToken = await loginService();
         let tokenParams = JSON.parse(jsonToken);
         const authKey = tokenParams.access_token
-        console.log('+++ transpackService.js (line: 69)', authKey);
         headers = JSON.parse(JSON.stringify(headers).replace("#authkey#", authKey));
         let rowcount = 0
         let ord_l_ids = await U_TRANSPACKIF_GetIDS_To_Send(queryParams);

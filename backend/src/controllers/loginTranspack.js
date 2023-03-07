@@ -6,7 +6,6 @@ export const loginController = {
 
         try {
             result = await loginService();
-            console.log('+++ loginTranspack.js (line: 9)',result);
             res.status(200).json(result);
         } catch (error) {
             console.log('12: ', error);
